@@ -13,12 +13,13 @@ use Doctrine\Common\Cache\FilesystemCache;
 
 $config = [
     // Your driver-specific configuration
-    // "telegram" => [
-    //    "token" => "TOKEN"
-    // ]
+     "telegram" => [
+        "token" => "499315223:AAFNxLBji7oynF_HVn6ixv0qi6vbmRkH2a8"
+     ]
 ];
 
 DriverManager::loadDriver(\BotMan\Drivers\Web\WebDriver::class);
+DriverManager::loadDriver(\BotMan\Drivers\Telegram\TelegramDriver::class);
 
 $doctrineCacheDriver = new FilesystemCache(__DIR__.'/cache');
 $botman = BotManFactory::create($config, new DoctrineCache($doctrineCacheDriver));

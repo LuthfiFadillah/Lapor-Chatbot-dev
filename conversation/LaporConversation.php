@@ -36,14 +36,16 @@ class LaporConversation extends Conversation
         if($col = $result->fetch(PDO::FETCH_NUM)){
 
             $this->next_state = $col[1];
-            error_log(strcasecmp($this->next_state, 'konfirmasi'), 0);
+//            error_log(strcasecmp($this->next_state, 'konfirmasi'), 0);
             if(strcasecmp($this->next_state, 'konfirmasi') !== 0){
                 $this->ask($col[0], function (Answer $answer){
                     $this->data = $answer->getText();
                     $this->bot->startConversation(new LaporConversation($this->next_state));
                 });
             }else {
+                error_log('0',0);
                 $this->say($col[0]);
+                error_log('1',0);
             }
 
         }
