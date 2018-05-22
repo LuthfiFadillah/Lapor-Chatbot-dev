@@ -6,54 +6,54 @@
  * Time: 13:47
  */
 
+require_once realpath($_SERVER["DOCUMENT_ROOT"]) . '\botman3    \Lapor-Chatbot-dev\mysql\connect_db.php';
+
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 
 class LaporConversation extends Conversation
 {
-    protected $name;
 
-    protected $email;
+    protected $state;
 
-    protected $phone;
+    protected $next_state;
 
-    protected $laporan;
+    protected $data;
 
-    public function askName()
+    public $con;
+
+    public function __construct($state)
     {
-        $this->ask('Halo! Nama kamu siapa?', function (Answer $answer) {
-            $this->name = $answer->getText();
-            $this->say('Selamat datang, ' . $this->name);
-            $this->askPhone();
-        });
+        $this->state = $state;
     }
 
-    public function askPhone()
-    {
-        $this->ask('tuliskan nomor telpon kamu!', function (Answer $answer) {
-            $this->phone = $answer->getText();
-            $this->askEmail();
-        });
-    }
 
-    public function askEmail()
-    {
-        $this->ask('tuliskan email kamu!', function (Answer $answer) {
-            $this->email = $answer->getText();
-            $this->askLaporan();
-        });
-    }
+    public function asking(){
+        $con = connect_db();
+        $query = "SELECT text_conversation, next_state FROM conversation WHERE state='$this->state'";
+        $result = $con->query($query);
 
-    public function askLaporan()
-    {
-        $this->ask('tuliskan Laporan kamu!', function (Answer $answer) {
-            $this->laporan = $answer->getText();
-            $this->say('Baik, laporan sudah kami terima. Tracking ID kamu adalah 1234567. Harap simpan Tracking ID untuk pengecekan laporan lebih lanjut, Terima Kasih!');
-        });
+        if($col = $result->fetch(PDO::FETCH_NUM)){
+
+            $this->next_state = $col[1];
+//            error_log(strcasecmp($this->next_state, 'konfirmasi'), 0);
+            if(strcasecmp($this->next_state, 'konfirmasi') !== 0){
+                $this->ask($col[0], function (Answer $answer){
+                    $this->data = $answer->getText();
+                    $this->bot->startConversation(new LaporConversation($this->next_state));
+                });
+            }else {
+                error_log('0',0);
+                $this->say($col[0]);
+                error_log('1',0);
+            }
+
+        }
+
     }
 
     public function run()
     {
-        $this->askName();
+        $this->asking();
     }
 }
