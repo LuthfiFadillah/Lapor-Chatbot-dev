@@ -9,7 +9,7 @@
 function connect_db(){
     try{
         $host = 'localhost';
-        $database = 'lapor-chatbot';
+        $database = 'lapor-chatbot-2';
         $username = 'root';
         $password = '';
 

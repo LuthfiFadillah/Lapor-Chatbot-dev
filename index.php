@@ -8,9 +8,9 @@
 
 <script>
     var botmanWidget = {
-        frameEndpoint: 'http://localhost:8080/botmantest/chat.html',
+        frameEndpoint: 'http://localhost:8080/botman2/Lapor-Chatbot-dev/chat.html',
         introMessage: 'Hello, I am a Chatbot',
-        chatServer : 'http://localhost:8080/botmantest/chat.php', 
+        chatServer : 'http://localhost:8080/botman2/Lapor-Chatbot-dev/chat.php',
         title: 'My Chatbot', 
         mainColor: '#456765',
         bubbleBackground: '#ff76f4',
